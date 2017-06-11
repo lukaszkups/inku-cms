@@ -1,6 +1,9 @@
 var path = require('path')
 var express = require('express')
 var expressVue = require('express-vue')
+var Sequelize = require('sequelize');
+var db = require('./db/db');
+
 var app = express();
 
 app.engine('vue', expressVue);
@@ -10,6 +13,18 @@ app.set('vue', {
     componentsDir: path.join(__dirname, '/views/components'),
     defaultLayout: 'layout'
 });
+
+var sequelize = new Sequelize(db);
+
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log('Connection has been established successfully.');
+  })
+  .catch(err => {
+    console.error('Unable to connect to the database:', err);
+  });
+
 
 var pageTitle = 'Inku.js - a static API generator for Your SPA websites';
 
